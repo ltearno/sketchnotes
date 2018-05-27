@@ -2,8 +2,8 @@ CC=clang
 
 PROGS=main
 
-CFLAGS=`pkg-config --cflags sdl2 gl glew`
-LDFLAGS=`pkg-config --libs sdl2 gl glew`
+CFLAGS=`pkg-config --cflags sdl2 gl glew libwacom`
+LDFLAGS=`pkg-config --libs sdl2 gl glew libwacom`
 
 all: $(PROGS)
 

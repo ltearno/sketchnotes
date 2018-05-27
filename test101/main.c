@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <dirent.h>
 #include <math.h>
+
+#include <libwacom/libwacom.h>
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -65,8 +68,76 @@ void display()
     //glFlush();  // Render now
 }
 
+static int event_devices_only(const struct dirent *dir)
+{
+    return strncmp("event", dir->d_name, 5) == 0;
+}
+
 int main(int argc, char *argv[])
 {
+    WacomDeviceDatabase *db;
+    WacomDevice *device;
+    WacomError *error;
+    db = libwacom_database_new();
+    error = libwacom_error_new();
+
+    WacomDevice **devices = libwacom_list_devices_from_database(db, error);
+    if (devices != NULL)
+    {
+        for (int i = 0; devices[i] != NULL; i++)
+        {
+            //libwacom_print_device_description(STDOUT_FILENO, devices[i]);
+        }
+    }
+
+    struct dirent **namelist = NULL;
+    int i = scandir("/dev/input", &namelist, event_devices_only, alphasort);
+
+    if (i < 0 || i == 0)
+    {
+        fprintf(stderr, "Failed to find any devices.\n");
+        return 2;
+    }
+
+    while (i--)
+    {
+        char fname[PATH_MAX];
+        snprintf(fname, sizeof(fname), "/dev/input/%s", namelist[i]->d_name);
+
+        WacomDevice *dev = libwacom_new_from_path(db, fname, WFALLBACK_GENERIC, NULL);
+        if (!dev)
+        {
+            continue;
+        }
+
+        printf("device %s : %s\n", fname, libwacom_get_name(dev));
+        //libwacom_print_device_description(STDOUT_FILENO, dev);
+
+        libwacom_destroy(dev);
+    }
+
+    device = libwacom_new_from_path(db, "/dev/input/event18", WFALLBACK_GENERIC, error);
+    if (!device)
+        return -1; // should check for error here
+    if (libwacom_is_builtin(device))
+        printf("This is a built-in device\n");
+
+    int width = libwacom_get_width(device);
+    int height = libwacom_get_height(device);
+    int hasStylus = libwacom_has_stylus(device);
+
+    printf("w:%d h:%d s:%d\n", width, height, hasStylus);
+
+    int nbStylus = 0;
+    int *stylusIds = libwacom_get_supported_styli(device, &nbStylus);
+    printf("nb stylus:%d\n", nbStylus);
+
+    for (int i = 0; i < nbStylus; i++)
+    {
+        WacomStylus *stylus = libwacom_stylus_get_for_id(db, stylusIds[i]);
+        printf("stylus : %s\n", libwacom_stylus_get_name(stylus));
+    }
+
     SDL_bool quit;
 
     SDL_Window *window;
@@ -116,13 +187,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    int nbDevices = SDL_GetNumTouchDevices();
-    if (nbDevices < 1)
-    {
-        printf("no touch device found !\n");
-        return 0;
-    }
-
     // Game loop
     while (!quit)
     {
@@ -140,17 +204,6 @@ int main(int argc, char *argv[])
             case SDL_FINGERUP:
             case SDL_MOUSEMOTION:
             {
-                SDL_TouchID touchId = SDL_GetTouchDevice(0);
-                if (touchId != 0)
-                {
-                    int nbFingers = SDL_GetNumTouchFingers(touchId);
-                    for (int f = 0; f < nbFingers; f++)
-                    {
-                        SDL_Finger *finger = SDL_GetTouchFinger(touchId, f);
-                        printf("x:%f, y:%f, p:%f\n", finger->x, finger->y, finger->pressure);
-                    }
-                }
-
                 //printf("Current finger position is: (%f, %f, %f)\n", sdlEvent.tfinger.x, sdlEvent.tfinger.y, sdlEvent.tfinger.pressure);
             }
             break;
@@ -178,6 +231,9 @@ int main(int argc, char *argv[])
 
     //Quit SDL subsystems
     SDL_Quit();
+
+    libwacom_destroy(device);
+    libwacom_database_destroy(db);
 
     return 0;
 }
