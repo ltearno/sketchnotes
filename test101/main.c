@@ -10,65 +10,66 @@
 
 #include <SDL2/SDL.h>
 
-void display() {
-   glClear(GL_COLOR_BUFFER_BIT);   // Clear the color buffer with current clearing color
- 
-   // Define shapes enclosed within a pair of glBegin and glEnd
-   glBegin(GL_QUADS);              // Each set of 4 vertices form a quad
-      glColor3f(1.0f, 0.0f, 0.0f); // Red
-      glVertex2f(-0.8f, 0.1f);     // Define vertices in counter-clockwise (CCW) order
-      glVertex2f(-0.2f, 0.1f);     //  so that the normal (front-face) is facing you
-      glVertex2f(-0.2f, 0.7f);
-      glVertex2f(-0.8f, 0.7f);
- 
-      glColor3f(0.0f, 1.0f, 0.0f); // Green
-      glVertex2f(-0.7f, -0.6f);
-      glVertex2f(-0.1f, -0.6f);
-      glVertex2f(-0.1f,  0.0f);
-      glVertex2f(-0.7f,  0.0f);
- 
-      glColor3f(0.2f, 0.2f, 0.2f); // Dark Gray
-      glVertex2f(-0.9f, -0.7f);
-      glColor3f(1.0f, 1.0f, 1.0f); // White
-      glVertex2f(-0.5f, -0.7f);
-      glColor3f(0.2f, 0.2f, 0.2f); // Dark Gray
-      glVertex2f(-0.5f, -0.3f);
-      glColor3f(1.0f, 1.0f, 1.0f); // White
-      glVertex2f(-0.9f, -0.3f);
-   glEnd();
- 
-   glBegin(GL_TRIANGLES);          // Each set of 3 vertices form a triangle
-      glColor3f(0.0f, 0.0f, 1.0f); // Blue
-      glVertex2f(0.1f, -0.6f);
-      glVertex2f(0.7f, -0.6f);
-      glVertex2f(0.4f, -0.1f);
- 
-      glColor3f(1.0f, 0.0f, 0.0f); // Red
-      glVertex2f(0.3f, -0.4f);
-      glColor3f(0.0f, 1.0f, 0.0f); // Green
-      glVertex2f(0.9f, -0.4f);
-      glColor3f(0.0f, 0.0f, 1.0f); // Blue
-      glVertex2f(0.6f, -0.9f);
-   glEnd();
- 
-   glBegin(GL_POLYGON);            // These vertices form a closed polygon
-      glColor3f(1.0f, 1.0f, 0.0f); // Yellow
-      glVertex2f(0.4f, 0.2f);
-      glVertex2f(0.6f, 0.2f);
-      glVertex2f(0.7f, 0.4f);
-      glVertex2f(0.6f, 0.6f);
-      glVertex2f(0.4f, 0.6f);
-      glVertex2f(0.3f, 0.4f);
-   glEnd();
- 
-   //glFlush();  // Render now
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer with current clearing color
+
+    // Define shapes enclosed within a pair of glBegin and glEnd
+    glBegin(GL_QUADS);           // Each set of 4 vertices form a quad
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    glVertex2f(-0.8f, 0.1f);     // Define vertices in counter-clockwise (CCW) order
+    glVertex2f(-0.2f, 0.1f);     //  so that the normal (front-face) is facing you
+    glVertex2f(-0.2f, 0.7f);
+    glVertex2f(-0.8f, 0.7f);
+
+    glColor3f(0.0f, 1.0f, 0.0f); // Green
+    glVertex2f(-0.7f, -0.6f);
+    glVertex2f(-0.1f, -0.6f);
+    glVertex2f(-0.1f, 0.0f);
+    glVertex2f(-0.7f, 0.0f);
+
+    glColor3f(0.2f, 0.2f, 0.2f); // Dark Gray
+    glVertex2f(-0.9f, -0.7f);
+    glColor3f(1.0f, 1.0f, 1.0f); // White
+    glVertex2f(-0.5f, -0.7f);
+    glColor3f(0.2f, 0.2f, 0.2f); // Dark Gray
+    glVertex2f(-0.5f, -0.3f);
+    glColor3f(1.0f, 1.0f, 1.0f); // White
+    glVertex2f(-0.9f, -0.3f);
+    glEnd();
+
+    glBegin(GL_TRIANGLES);       // Each set of 3 vertices form a triangle
+    glColor3f(0.0f, 0.0f, 1.0f); // Blue
+    glVertex2f(0.1f, -0.6f);
+    glVertex2f(0.7f, -0.6f);
+    glVertex2f(0.4f, -0.1f);
+
+    glColor3f(1.0f, 0.0f, 0.0f); // Red
+    glVertex2f(0.3f, -0.4f);
+    glColor3f(0.0f, 1.0f, 0.0f); // Green
+    glVertex2f(0.9f, -0.4f);
+    glColor3f(0.0f, 0.0f, 1.0f); // Blue
+    glVertex2f(0.6f, -0.9f);
+    glEnd();
+
+    glBegin(GL_POLYGON);         // These vertices form a closed polygon
+    glColor3f(1.0f, 1.0f, 0.0f); // Yellow
+    glVertex2f(0.4f, 0.2f);
+    glVertex2f(0.6f, 0.2f);
+    glVertex2f(0.7f, 0.4f);
+    glVertex2f(0.6f, 0.6f);
+    glVertex2f(0.4f, 0.6f);
+    glVertex2f(0.3f, 0.4f);
+    glEnd();
+
+    //glFlush();  // Render now
 }
 
 int main(int argc, char *argv[])
 {
     SDL_bool quit;
 
-    SDL_Window* window;
+    SDL_Window *window;
     SDL_GLContext glContext;
     SDL_Event sdlEvent;
 
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     // Initialize video subsystem
-    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         // Display error message
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -89,11 +90,11 @@ int main(int argc, char *argv[])
     else
     {
         // Create window
-        window = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE );
-        if( window == NULL )
+        window = SDL_CreateWindow("Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+        if (window == NULL)
         {
             // Display error message
-            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+            printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
             return 0;
         }
         else
@@ -101,10 +102,10 @@ int main(int argc, char *argv[])
             // Create OpenGL context
             glContext = SDL_GL_CreateContext(window);
 
-            if( glContext == NULL )
+            if (glContext == NULL)
             {
                 // Display error message
-                printf( "OpenGL context could not be created! SDL Error: %s\n", SDL_GetError() );
+                printf("OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
                 return 0;
             }
             else
@@ -115,25 +116,48 @@ int main(int argc, char *argv[])
         }
     }
 
+    int nbDevices = SDL_GetNumTouchDevices();
+    if (nbDevices < 1)
+    {
+        printf("no touch device found !\n");
+        return 0;
+    }
+
     // Game loop
     while (!quit)
     {
-        while(SDL_PollEvent(&sdlEvent) != 0)
+        while (SDL_PollEvent(&sdlEvent) != 0)
         {
             // Esc button is pressed
-            switch(sdlEvent.type)
+            switch (sdlEvent.type)
             {
-                case SDL_QUIT:
-                    quit = SDL_TRUE;
-                    break;
-                
-                case SDL_FINGERMOTION:
-                    printf("Current finger position is: (%f, %f, %f)\n", sdlEvent.tfinger.x, sdlEvent.tfinger.y, sdlEvent.tfinger.pressure);
-                    break;
-                
-                case SDL_MOUSEMOTION:
-                    printf("Current mouse position is: (%d, %d)\n", sdlEvent.motion.x, sdlEvent.motion.y);
-                    break;
+            case SDL_QUIT:
+                quit = SDL_TRUE;
+                break;
+
+            case SDL_FINGERMOTION:
+            case SDL_FINGERDOWN:
+            case SDL_FINGERUP:
+            case SDL_MOUSEMOTION:
+            {
+                SDL_TouchID touchId = SDL_GetTouchDevice(0);
+                if (touchId != 0)
+                {
+                    int nbFingers = SDL_GetNumTouchFingers(touchId);
+                    for (int f = 0; f < nbFingers; f++)
+                    {
+                        SDL_Finger *finger = SDL_GetTouchFinger(touchId, f);
+                        printf("x:%f, y:%f, p:%f\n", finger->x, finger->y, finger->pressure);
+                    }
+                }
+
+                //printf("Current finger position is: (%f, %f, %f)\n", sdlEvent.tfinger.x, sdlEvent.tfinger.y, sdlEvent.tfinger.pressure);
+            }
+            break;
+
+                //case SDL_MOUSEMOTION:
+                //    printf("Current mouse position is: (%d, %d)\n", sdlEvent.motion.x, sdlEvent.motion.y);
+                //    break;
             }
         }
 
