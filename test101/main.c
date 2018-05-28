@@ -13,6 +13,10 @@
 
 #include <SDL2/SDL.h>
 
+#include <X11/extensions/XInput.h>
+
+#include <libinput.h>
+
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT); // Clear the color buffer with current clearing color
@@ -75,6 +79,8 @@ static int event_devices_only(const struct dirent *dir)
 
 int main(int argc, char *argv[])
 {
+    //XDeviceInfo* deviceInfo = XListInputDevices(m_display, &deviceCount);
+
     WacomDeviceDatabase *db;
     WacomDevice *device;
     WacomError *error;
@@ -188,6 +194,9 @@ int main(int argc, char *argv[])
     }
 
     // Game loop
+    float curX = 0.9f;
+    float curY = -0.4f;
+
     while (!quit)
     {
         while (SDL_PollEvent(&sdlEvent) != 0)
@@ -202,15 +211,19 @@ int main(int argc, char *argv[])
             case SDL_FINGERMOTION:
             case SDL_FINGERDOWN:
             case SDL_FINGERUP:
-            case SDL_MOUSEMOTION:
-            {
-                //printf("Current finger position is: (%f, %f, %f)\n", sdlEvent.tfinger.x, sdlEvent.tfinger.y, sdlEvent.tfinger.pressure);
-            }
-            break;
-
                 //case SDL_MOUSEMOTION:
-                //    printf("Current mouse position is: (%d, %d)\n", sdlEvent.motion.x, sdlEvent.motion.y);
-                //    break;
+                {
+                    curX = sdlEvent.tfinger.x;
+                    curY = sdlEvent.tfinger.y;
+                    //printf("Current finger position is: (%f, %f, %f)\n", sdlEvent.tfinger.x, sdlEvent.tfinger.y, sdlEvent.tfinger.pressure);
+                }
+                break;
+
+            case SDL_MOUSEMOTION:
+                //printf("Current mouse position is: (%d, %d)\n", sdlEvent.motion.x, sdlEvent.motion.y);
+                curX = sdlEvent.motion.x / 400.0f - 1.0f;
+                curY = -(sdlEvent.motion.y / 300.0f - 1.0f);
+                break;
             }
         }
 
@@ -219,7 +232,16 @@ int main(int argc, char *argv[])
         // Clear color buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        display();
+        glBegin(GL_TRIANGLES);
+        glColor3f(1.0f, 0.0f, 0.0f); // Red
+        glVertex2f(0.0f, -0.0f);
+        glColor3f(0.0f, 1.0f, 0.0f); // Green
+        glVertex2f(curX, curY);
+        glColor3f(0.0f, 0.0f, 1.0f); // Blue
+        glVertex2f(0.6f, -0.9f);
+        glEnd();
+
+        //display();
 
         // Update window with OpenGL rendering
         SDL_GL_SwapWindow(window);
